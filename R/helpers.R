@@ -906,7 +906,22 @@ cell_borders <- function(selection,
     c("solid", "dashed", "dotted")
   )
 
-  list(cell_borders = style_vals)
+  cell_style_structure("cell_borders", style_vals)
+}
+
+
+cell_style_to_html.cell_borders <- function(style) {
+
+  style <- style %>% unclass()
+
+  borders_style <- paste(style$style, style$weight, style$color)
+
+  css <- setNames(
+    rep(borders_style, length(style$selection)),
+    paste0("border-", style$selection)
+  )
+
+  css
 }
 
 
