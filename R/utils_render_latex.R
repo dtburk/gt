@@ -53,7 +53,7 @@ latex_group_row <- function(group_name,
 create_table_start_l <- function(col_alignment) {
 
   paste0(
-    "\\captionsetup[table]{labelformat=empty,skip=1pt}\n",
+    "\\captionsetup[table]{skip=1pt}\n",
     "\\begin{longtable}{",
     col_alignment %>% substr(1, 1) %>% paste(collapse = ""),
     "}\n",
