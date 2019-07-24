@@ -259,3 +259,15 @@ create_source_note_component_l <- function(source_note) {
 
   source_note_component
 }
+
+#' Place LaTeX table in a table environment
+#'
+#' Place LaTeX table in a table environment by enclosing it in
+#' \code{\\begin\{table\}} and \code{\\end\{table\}} tags.
+#'
+#' @param tab_latex The table as a length-one LaTeX character string.
+#'
+#' @export
+entable_latex <- function(tab_latex) {
+  paste0("\\begin{table}[t]\n", tab_latex, "\\end{table}")
+}

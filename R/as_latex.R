@@ -7,6 +7,7 @@
 #' containing the LaTeX code.
 #'
 #' @param data A table object that is created using the [gt()] function.
+#' @param latex_label Label assigned to table for use in cross-referencing.
 #' @examples
 #' # Use `gtcars` to create a gt table;
 #' # add a header and then export as
@@ -34,7 +35,7 @@
 #'
 #' @family table export functions
 #' @export
-as_latex <- function(data) {
+as_latex <- function(data, latex_label = NULL) {
 
   # Build all table data objects through a common pipeline
   built_data <- data %>% build_data(context = "latex")
@@ -92,7 +93,8 @@ as_latex <- function(data) {
         styles_resolved = styles_resolved,
         n_cols = n_cols,
         subtitle_defined = subtitle_defined,
-        output = "latex"
+        output = "latex",
+        latex_label = latex_label
       )
 
     # Create the columns component of the table

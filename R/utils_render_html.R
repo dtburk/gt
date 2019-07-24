@@ -84,7 +84,8 @@ create_heading_component <- function(heading,
                                      styles_resolved = NULL,
                                      n_cols,
                                      subtitle_defined,
-                                     output = "html") {
+                                     output = "html",
+                                     latex_label = NULL) {
 
   # If there is no heading component, then return
   # an empty string
@@ -219,10 +220,14 @@ create_heading_component <- function(heading,
 
     title_row <-
       paste0(heading$title, footnote_title_glyphs) %>%
-      paste_left("\\large ") %>%
       paste_right("\\\\ \n")
 
     if (subtitle_defined) {
+
+      title_row <-
+        paste0(heading$title, footnote_title_glyphs) %>%
+        paste_left("\\large ") %>%
+        paste_right("\\\\ \n")
 
       subtitle_row <-
         paste0(heading$subtitle, footnote_subtitle_glyphs) %>%
@@ -233,9 +238,22 @@ create_heading_component <- function(heading,
       subtitle_row <- ""
     }
 
-    heading_component <-
-      paste0(title_row, subtitle_row) %>%
-      paste_between(x_2 = c("\\caption*{\n", "} \\\\ \n"))
+    if (!is.null(latex_label)) {
+
+      heading_component <- paste0(
+        "\\caption{\n\\label{",
+        latex_label,
+        "}",
+        paste0(title_row, subtitle_row),
+        "} \\\\ \n"
+      )
+
+    } else {
+      heading_component <-
+        paste0(title_row, subtitle_row) %>%
+        paste_between(x_2 = c("\\caption{\n", "} \\\\ \n"))
+    }
+
   }
 
   if (output == "rtf") {
