@@ -52,10 +52,15 @@ latex_group_row <- function(group_name,
 #' @noRd
 create_table_start_l <- function(col_alignment) {
 
+  # Allow fixed-width alignment to pass through unmodified
+  is_not_fixed_width_align <- function(x) !stringr::str_detect(x, "^p\\{")
+  col_alignment <- col_alignment %>%
+    purrr::modify_if(is_not_fixed_width_align, ~ substr(.x, 1, 1))
+
   paste0(
     "\\captionsetup[table]{skip=1pt}\n",
     "\\begin{longtable}{",
-    col_alignment %>% substr(1, 1) %>% paste(collapse = ""),
+    col_alignment %>% paste(collapse = ""),
     "}\n",
     collapse = "")
 }
@@ -265,9 +270,56 @@ create_source_note_component_l <- function(source_note) {
 #' Place LaTeX table in a table environment by enclosing it in
 #' \code{\\begin\{table\}} and \code{\\end\{table\}} tags.
 #'
-#' @param tab_latex The table as a length-one LaTeX character string.
+#' @param tab_latex The LaTeX table as a length-one character vector.
 #'
 #' @export
 entable_latex <- function(tab_latex) {
   paste0("\\begin{table}[t]\n", tab_latex, "\\end{table}")
+}
+
+
+#' Place LaTeX table in landscape orientation
+#'
+#' Place LaTeX table in landscape orientation (requires pdflscape package)
+#'
+#' @param tab_latex The LaTeX table as a length-one character vector.
+#'
+#' @export
+enlandscape_latex <- function(tab_latex) {
+  paste0("\\begin{landscape}\n\n", tab_latex, "\n\\end{landscape}")
+}
+
+
+#' Interpolate degree symbol
+#'
+#' Interpolate degree symbol by replacing the text \code{@circ@} with
+#'     \code{$^\\circ$}.
+#'
+#' @param tab_latex The LaTeX table as a length-one character vector.
+#'
+#' @export
+interp_degree_sym_latex <- function(tab_latex) {
+  stringr::str_replace_all(tab_latex, stringr::fixed("@circ@"), "$^\\circ$")
+}
+
+
+#' Interpolate in-text citation
+#'
+#' Interpolate in-text citation by replacing the text \code{@cite_key} with
+#'     \code{\\cite{cite_key}}.
+#'
+#' @param tab_latex The LaTeX table as a length-one character vector.
+#'
+#' @export
+interp_citation_latex <- function(tab_latex) {
+  cites <- stringr::str_extract_all(tab_latex, "@[^ .,]+")[[1]]
+  unescaped_cites <- stringr::str_replace_all(cites, stringr::fixed("\\_"), "_")
+  for (i in seq_along(cites)) {
+    tab_latex <- stringr::str_replace(
+      tab_latex,
+      fixed(cites[i]),
+      unescaped_cites[i]
+    )
+  }
+  stringr::str_replace_all(tab_latex, "@([^ .,]+)", "\\\\cite{\\1}")
 }

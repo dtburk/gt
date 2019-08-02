@@ -7,7 +7,7 @@
 entable_latex(tab_latex)
 }
 \arguments{
-\item{tab_latex}{The table as a length-one LaTeX character string.}
+\item{tab_latex}{The LaTeX table as a length-one character vector.}
 }
 \description{
 Place LaTeX table in a table environment by enclosing it in

@@ -4,17 +4,23 @@
 \alias{cols_align}
 \title{Set the alignment of columns}
 \usage{
-cols_align(data, align = c("auto", "left", "center", "right"),
-  columns = TRUE)
+cols_align(data, align = c("auto", "left", "center", "right",
+  "fixed-width"), width = NULL, columns = TRUE)
 }
 \arguments{
 \item{data}{A table object that is created using the \code{\link[=gt]{gt()}} function.}
 
-\item{align}{The alignment type. This can be any of \code{"center"}, \code{"left"}, or
-\code{"right"} for center-, left-, or center-alignment. Alternatively, the
-\code{"auto"} option (the default), will automatically align values in columns
-according to the data type (see the Details section for specifics on which
-alignments are applied).}
+\item{align}{The alignment type. This can be any of \code{"center"}, \code{"left"},
+\code{"right"}, or \code{"fixed-width"} for center-, left-, right-, or
+fixed-width-alignment. Alternatively, the \code{"auto"} option (the default),
+will automatically align values in columns according to the data type (see
+the Details section for specifics on which alignments are applied). Note
+that fixed-width-alignment is only supported for LaTeX output type.}
+
+\item{width}{The width for a fixed-width LaTeX column, as a character value.
+This value will be passed through as raw LaTeX, and thus should be
+specified in units LaTeX will understand, such as \code{"5cm"}, \code{".25in"}, or
+\code{".2\textwidth"}.}
 
 \item{columns}{An optional vector of column names for which the alignment
 should be applied. If nothing is supplied, or if \code{columns} is \code{TRUE}), then

@@ -13,11 +13,16 @@
 #' right-alignment is used for the `numeric` and `integer` columns.
 #'
 #' @param data A table object that is created using the [gt()] function.
-#' @param align The alignment type. This can be any of `"center"`, `"left"`, or
-#'   `"right"` for center-, left-, or center-alignment. Alternatively, the
-#'   `"auto"` option (the default), will automatically align values in columns
-#'   according to the data type (see the Details section for specifics on which
-#'   alignments are applied).
+#' @param align The alignment type. This can be any of `"center"`, `"left"`,
+#'   `"right"`, or `"fixed-width"` for center-, left-, right-, or
+#'   fixed-width-alignment. Alternatively, the `"auto"` option (the default),
+#'   will automatically align values in columns according to the data type (see
+#'   the Details section for specifics on which alignments are applied). Note
+#'   that fixed-width-alignment is only supported for LaTeX output type.
+#' @param width The width for a fixed-width LaTeX column, as a character value.
+#'   This value will be passed through as raw LaTeX, and thus should be
+#'   specified in units LaTeX will understand, such as `"5cm"`, `".25in"`, or
+#'   `".2\textwidth"`.
 #' @param columns An optional vector of column names for which the alignment
 #'   should be applied. If nothing is supplied, or if `columns` is `TRUE`), then
 #'   the chosen alignment affects all columns.
@@ -43,7 +48,9 @@
 #' @family column modification functions
 #' @export
 cols_align <- function(data,
-                       align = c("auto", "left", "center", "right"),
+                       align = c("auto", "left", "center", "right",
+                                 "fixed-width"),
+                       width = NULL,
                        columns = TRUE) {
 
   # Get the `align` value, this stops the function if there is no match
@@ -77,6 +84,13 @@ cols_align <- function(data,
       "integer" = "center",
       "center") %>%
       unname()
+  } else if (align == "fixed-width") {
+
+    # Use the `p{width}` LaTeX alignment syntax
+    if (is.null(width)) {
+      stop("You must specify a width for fixed-width alignment.")
+    }
+    align <- paste0("p{", width, "}")
   }
 
   # Set the alignment value for all columns in `columns`
