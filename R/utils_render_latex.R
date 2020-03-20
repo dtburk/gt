@@ -194,17 +194,30 @@ create_body_component_l <- function(row_splits,
 }
 
 #' @noRd
-create_table_end_l <- function() {
+create_table_end_l <- function(footnotes_resolved,
+                               opts_df,
+                               source_note,
+                               n_cols) {
+
+  footnote_component <- create_footnote_component_l(
+    footnotes_resolved,
+    opts_df,
+    n_cols
+  )
+  source_note_component <- create_source_note_component_l(source_note, n_cols)
 
   paste0(
     "\\bottomrule\n",
+    source_note_component,
+    footnote_component,
     "\\end{longtable}\n",
     collapse = "")
 }
 
 #' @noRd
 create_footnote_component_l <- function(footnotes_resolved,
-                                        opts_df) {
+                                        opts_df,
+                                        n_cols) {
 
   # If the `footnotes_resolved` object has no
   # rows, then return an empty footnotes component
@@ -231,20 +244,21 @@ create_footnote_component_l <- function(footnotes_resolved,
   # Create the footnotes block
   footnote_component <-
     paste0(
-      "\\vspace{-5mm}\n",
-      "\\begin{minipage}{\\linewidth}\n",
+      "\\multicolumn{", n_cols, "}{l}{",
+      # "\\vspace{-5mm}\n",
+      # "\\begin{minipage}{\\linewidth}\n",
       paste0(
         footnote_glyph_to_latex(footnotes_tbl[["fs_id"]]),
         footnotes_tbl[["text"]] %>%
           unescape_html() %>%
-          markdown_to_latex(), " \\\\ \n", collapse = ""),
-      "\\end{minipage}\n", collapse = "")
+          markdown_to_latex()),
+      "} \\\\ \n", collapse = "")
 
   footnote_component
 }
 
 #' @noRd
-create_source_note_component_l <- function(source_note) {
+create_source_note_component_l <- function(source_note, n_cols) {
 
   # If the `footnotes_resolved` object has no
   # rows, then return an empty footnotes component
@@ -257,10 +271,10 @@ create_source_note_component_l <- function(source_note) {
   # Create the source notes block
   source_note_component <-
     paste0(
-      "\\begin{minipage}{\\linewidth}\n",
+      "\\multicolumn{", n_cols, "}{l}{",
       paste0(
-        source_note %>% as.character(), "\\\\ \n", collapse = ""),
-      "\\end{minipage}\n", collapse = "")
+        source_note %>% as.character()),
+      "} \\\\ \n", collapse = "")
 
   source_note_component
 }

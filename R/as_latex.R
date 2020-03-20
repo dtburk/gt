@@ -121,20 +121,25 @@ as_latex <- function(data, latex_label = NULL) {
       )
 
     # Create a LaTeX fragment for the ending tabular statement
-    table_end <- create_table_end_l()
+    table_end <- create_table_end_l(
+      footnotes_resolved = footnotes_resolved,
+      opts_df = opts_df,
+      source_note = source_note,
+      n_cols = n_cols
+    )
 
     # Create the footnote component of the table
-    footnote_component <-
-      create_footnote_component_l(
-        footnotes_resolved = footnotes_resolved,
-        opts_df = opts_df
-      )
+    # footnote_component <-
+    #   create_footnote_component_l(
+    #     footnotes_resolved = footnotes_resolved,
+    #     opts_df = opts_df
+    #   )
 
     # Create the source note component of the table
-    source_note_component <-
-      create_source_note_component_l(
-        source_note = source_note
-      )
+    # source_note_component <-
+    #   create_source_note_component_l(
+    #     source_note = source_note
+    #   )
 
     # If the `rmarkdown` package is available, use the
     # `latex_dependency()` function to load latex packages
@@ -156,8 +161,8 @@ as_latex <- function(data, latex_label = NULL) {
         columns_component,
         body_component,
         table_end,
-        footnote_component,
-        source_note_component,
+        # footnote_component,
+        # source_note_component,
         collapse = "") %>%
       knitr::asis_output(meta = latex_packages)
 
