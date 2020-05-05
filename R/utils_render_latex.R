@@ -287,8 +287,13 @@ create_source_note_component_l <- function(source_note, n_cols) {
 #' @param tab_latex The LaTeX table as a length-one character vector.
 #'
 #' @export
-entable_latex <- function(tab_latex) {
-  paste0("\\begin{table}[t]\n", tab_latex, "\\end{table}")
+entable_latex <- function(tab_latex, top = TRUE) {
+  if (top) {
+    paste0("\\begin{table}[t]\n", tab_latex, "\\end{table}")
+  } else {
+    paste0("\\begin{table}\n", tab_latex, "\\end{table}")
+  }
+
 }
 
 
