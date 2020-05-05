@@ -289,9 +289,9 @@ create_source_note_component_l <- function(source_note, n_cols) {
 #' @export
 entable_latex <- function(tab_latex, top = TRUE) {
   if (top) {
-    paste0("\\begin{table}[t]\n", tab_latex, "\\end{table}")
+    paste0("\\begin{table}[t]\n", tab_latex, "\\end{table}\n\n")
   } else {
-    paste0("\\begin{table}\n", tab_latex, "\\end{table}")
+    paste0("\\begin{table}\n", tab_latex, "\\end{table}\n\n")
   }
 
 }
